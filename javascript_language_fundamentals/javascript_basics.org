@@ -1,0 +1,144 @@
+Convert a String to a Number (with sign)
+
+For this exercise we're going to learn more about type conversion by implementing our own parseInt function that converts a string of numeric characters (including an optional plus or minus sign) to a number.
+
+The function takes a string of digits as an argument, and returns the appropriate number. Do not use any of the built-in functions for converting a string to a number type.
+
+For now, do not worry about leading + or - signs, nor should you worry about invalid characters; assume all characters will be numeric.
+
+Examples:
+stringToInteger('4321');      // 4321
+stringToInteger('570');       // 570
+
+Input: String
+Output: Number
+
+Requirements:
+Explicit:
+Converts input string of digits to number.
+Input consists only of digits.
+May not use built-in functions.
+No invalid characters in input.
+Implicit:
+Number is decimal format.
+
+Approach:
+Declare a result number and initialize it to zero. Declare and initialize an array containing the strings '0' through '9'. Iterate through string from beginning to end. At each character, use the string array to determine the digit (index of array). Multiply this digit by the decimal place (10 to the iteration index), and add this to the result number.
+
+To apply sign to number, check if first character is a sign. If it is negative, return the negative of the number.
+
+
+#+BEGIN_SRC js
+  function log(variable) {
+    console.log(``)
+  }
+
+  function stringToInteger(str) {
+    const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']; 
+    let negative = false;
+    const sign = getSign(str);
+    if (getSign(str)) {
+      console.log('String is signed');
+      negative = (sign == '-') ? true : false;
+      str = str.slice(1);
+    }
+    const length = str.length;
+    let result = 0;
+    for (let i = length - 1, placeExponent = 0; i >= 0; i--, placeExponent++) {
+      const stringDigit = str[i];
+      const integerDigit = digits.indexOf(stringDigit);
+      const decimalPlace = 10**placeExponent;
+      const placedDigit = integerDigit * decimalPlace;
+      result += placedDigit;
+    }
+    return (negative) ? -result : result;
+  }
+
+  function getSign(str) {
+    let sign;
+    switch (str[0]) {
+    case '-':
+      sign = '-';
+      break;
+    case '+':
+      sign = '+';
+      break;
+    default:
+      sign = null;
+    }
+    return sign;
+  }
+
+  result = stringToInteger('+560');
+  console.log(`final result: ${result}`);
+
+#+END_SRC
+
+#+RESULTS:
+: String is signed
+: final result: 560
+: undefined
+
+Convert a Number to a String
+
+In the previous two exercises, you developed functions that convert simple numeric strings to signed integers. In this exercise and the next, you're going to reverse those functions.
+
+You will learn more about converting strings to numbers by writing a function that takes a positive integer or zero, and converts it to a string representation.
+
+You may not use any of the standard conversion functions available in JavaScript, such as String(), Number.prototype.toString, or an expression such as '' + number. Your function should do this the old-fashioned way and construct the string by analyzing and manipulating the number.
+
+Examples:
+
+integerToString(4321);      // "4321"
+integerToString(0);         // "0"
+integerToString(5000);      // "5000"
+
+Input: Number
+Output: String
+Requirements:
+Explicit:
+Input integer to be converted to output String.
+Cannot use built in String conversion functions.
+Implicit: Input will not be an inordinately long number.
+
+Approach: Initialize array of String digits (each String digit on index 0 through 9). 
+
+#+BEGIN_SRC js
+  const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+  function getResultDigits(number, resultDigits = []) {
+    resultDigits.unshift(getLastDigit(number));
+    if (number >= 10) {
+      getResultDigits(Math.floor(number / 10), resultDigits);
+    }
+    return resultDigits;
+  }
+
+  function getLastDigit(number) {
+    const digit = number % 10;
+    return digits[digit];
+  }
+
+  function integerToString(number) {
+    return getSign(number) + getResultDigits(Math.abs(number)).join('');
+  }
+
+  function getSign(number) {
+    if (number < 0) {
+      return '-'
+    } else if (number > 0) {
+      return '+'
+    } else {
+      return ''
+    }
+  }
+
+  console.log(integerToString(-205));
+
+#+END_SRC
+
+#+RESULTS:
+: -205
+: undefined
+
+
